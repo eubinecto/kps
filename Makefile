@@ -10,3 +10,6 @@ test:
 
 format:
 	black ./ --line-length=110
+
+deploy:
+	git push heroku main
