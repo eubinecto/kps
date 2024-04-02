@@ -4,7 +4,6 @@ styler = Styler(scorer="heuristic")
 print("##### lm을 쓰지 않는 경우 맥락 고려 X ######")
 print(styler("내일 저랑 같이 점심 먹어요.", 0))
 
-print(styler.log.keys())
 
 styler = Styler(scorer="gpt2")  # uses GPT2Scorer by default
 print("##### lm을 쓰는 경우 맥락 고려 O ######")
