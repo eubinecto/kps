@@ -1,4 +1,3 @@
-from politely.rules import SEP, TAG, NULL, SELF, RULES, PREFERENCES, CASUAL, POLITE, FORMAL  # noqa
-from politely.styler import Styler  # noqa
+from politely.rules import SEP, TAG, NULL, SELF, RULES, PREFERENCES, CASUAL, POLITE, FORMAL  
+from politely.styler import Styler 
 
-__version__ = "v3.3.1"
