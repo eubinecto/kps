@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "politely"
-version = "3.3.3"
+version = "3.3.4"
 description = "An explainable styler for the Korean language"
 authors = ["Eu-Bin KIM <tlrndk123@gmail.com>"]
 readme = "README.md"
@@ -9,7 +9,6 @@ readme = "README.md"
 python = "^3.9.12"
 kiwipiepy = "^0.17.0"
 transformers = "^4.39.3"
-torch = "^2.2.2"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.1"

@@ -1,12 +1,8 @@
 import itertools
-import os
 import re
 from copy import copy, deepcopy
-import random
 from typing import Any, Tuple, Dict, Set
 from functools import wraps
-import numpy as np
-import torch
 from politely.errors import EFNotSupportedError, SFNotIncludedError, EFNotIncludedError
 from politely.fetchers import fetch_kiwi
 from politely import RULES, SEP, TAG, NULL, SELF
@@ -33,12 +29,19 @@ class Styler:
     """
     A rule-based Korean Politeness Styler
     """
-    def __init__(self, strict: bool = False, scorer: str = "gpt2"):
+    def __init__(self, strict: bool = False, scorer: str = "heuristic"):
         #  --- object-owned attributes --- #\
         if scorer == "heuristic":
             self.scorer: Scorer = HeuristicScorer()
         elif scorer == "gpt2":
-            self.scorer: Scorer = GPT2Scorer()
+            try:
+                import torch
+            except ImportError:
+                raise ImportError(
+                    "torch (Pytorch) is required to use GPT2Scorer.  Please install it via `pip3 install torch`."
+                )
+            else:
+                self.scorer: Scorer = GPT2Scorer()
         else:
             raise ValueError(f"scorer should be either 'heuristic' or 'gpt2', but got {scorer}")
         self.strict = strict
@@ -68,15 +71,6 @@ class Styler:
         self.out = None
         self.log.clear()
         self.log.update({"conjugations": set(), "honorifics": set()})
-        # --- seed everything --- #
-        seed = 318
-        random.seed(seed)
-        os.environ['PYTHONHASHSEED'] = str(seed)
-        np.random.seed(seed)
-        torch.manual_seed(seed)
-        torch.cuda.manual_seed(seed)
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = True
         return self
 
     @log

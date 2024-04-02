@@ -1,7 +1,8 @@
+import os
+import random
 from typing import List
-import torch
+import numpy as np
 from kiwipiepy import Kiwi
-from torch.nn import CrossEntropyLoss
 from transformers import AutoTokenizer, GPT2LMHeadModel
 from politely import TAG
 from politely.modeling_scorer import Scorer
@@ -12,9 +13,8 @@ class GPT2Scorer(Scorer):
     More accurate than heuristic scorer, but slower.
     """
 
-    def __init__(
-        self, device: str = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    ):
+    def __init__(self, device: str = "cpu"):
+        import torch
         self.gpt2 = GPT2LMHeadModel.from_pretrained(
             "beomi/kykim-gpt3-kor-small_based_on_gpt2"
         ).to(device)
@@ -23,6 +23,15 @@ class GPT2Scorer(Scorer):
         )
         self.device = device
         self.gpt2.eval()
+        # --- seed everything --- #
+        seed = 318
+        random.seed(seed)
+        os.environ["PYTHONHASHSEED"] = str(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = True
 
     def __call__(
         self,
@@ -37,6 +46,8 @@ class GPT2Scorer(Scorer):
         이걸 batched processing으로 바꾸고 계속하기. device parameter도 추가하기.
         compute the negative log likelihood of the candidates.
         """
+        import torch
+        from torch.nn import CrossEntropyLoss
         # first, join the pairs into a sentence
         sents = [
             kiwi.join(tuple(pair.split(TAG)) for pair in candidate)
