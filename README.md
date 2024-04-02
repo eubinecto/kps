@@ -150,7 +150,7 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 내일 나랑 같이 점심 먹어.
 ```
 
-`gpt2` scorer is a bit slower, but does take context into account:
+But `gpt2` scorer is a bit slower, but does take context into account:
 ```python
 from politely.modeling_gpt2_scorer import GPT2Scorer
 styler = Styler(scorer="gpt2")  # uses GPT2Scorer by default
@@ -162,6 +162,8 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 ##### lm을 쓰는 경우 맥락 고려 O ######
 내일 나랑 같이 점심 먹자.  # 권유가 아닌 청유이므로 이게 맞음
 ```
+
+More scoring options will be made available in the future. 
 
 ## Hosting the interactive demo 
 

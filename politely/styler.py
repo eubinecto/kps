@@ -3,9 +3,8 @@ import os
 import re
 from copy import copy, deepcopy
 import random
-from typing import Any, List, Tuple, Dict, Set
+from typing import Any, Tuple, Dict, Set
 from functools import wraps
-from loguru import logger
 import numpy as np
 import torch
 from politely.errors import EFNotSupportedError, SFNotIncludedError, EFNotIncludedError
