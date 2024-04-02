@@ -9,7 +9,7 @@ readme = "README.md"
 python = "^3.9.12"
 kiwipiepy = "^0.17.0"
 transformers = "^4.39.2"
-torch = "^2.2.2"
+torch = {extras = ["cpu"], version = "^2.2.2"}
 
 
 [tool.poetry.group.dev.dependencies]
