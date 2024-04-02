@@ -47,7 +47,8 @@ POLITE = {
     f"대요{TAG}EF",
     f"ᆯ게요{TAG}EF",
     f"ᆫ대요{TAG}EF",
-    f"ᆫ가요{TAG}EF"
+    f"ᆫ가요{TAG}EF",
+    f"세요{TAG}EF"
 }
 
 FORMAL = {
@@ -221,6 +222,17 @@ RULES.update(
     }
 )
 
+
+# # --- 으세요 -> 으십시오 --- #
+# RULES.update(
+#     {
+#         rf"(?P<MASK>으세요{TAG}EF)": (
+#             {f"어{TAG}EF"},
+#             {f"으세요{TAG}EF"},
+#             {f"ᆸ시오{TAG}EF"}
+#         )
+#     }
+# )
 
 # ---- to be used for scoring -- #
 PREFERENCES = {

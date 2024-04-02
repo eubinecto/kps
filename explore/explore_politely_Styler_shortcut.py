@@ -4,10 +4,10 @@ from pprint import pprint
 
 def main():
     styler = Styler()
-    print(styler.logs)
-    print(styler.logs)
+    print(styler.log)
+    print(styler.log)
     print(styler("나한테 왜 그런거야?", 2))
-    pprint(styler.logs)
+    pprint(styler.log)
 
 
 if __name__ == "__main__":

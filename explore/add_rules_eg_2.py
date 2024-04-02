@@ -24,4 +24,4 @@ styler.add_rules(
     }
 )
 print(styler(sent, 1))
-pprint(styler.logs['guess']['out'])
+pprint(styler.log['guess']['out'])

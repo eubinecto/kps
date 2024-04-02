@@ -136,7 +136,32 @@ pprint(styler.logs['guess']['out'])
   0.0125)]
 ```
 
+### 5️⃣ Take contexts into account with the `gpt2` scorer 
 
+`heuristic` scorer is fast, but falls short at taking context into account:
+```python
+styler = Styler(scorer="heuristic")
+print("##### lm을 쓰지 않는 경우 맥락 고려 X ######")
+print(styler("내일 저랑 같이 점심 먹어요.", 0))
+```
+
+```
+##### lm을 쓰지 않는 경우 맥락 고려 X ######
+내일 나랑 같이 점심 먹어.
+```
+
+`gpt2` scorer is a bit slower, but does take context into account:
+```python
+from politely.modeling_gpt2_scorer import GPT2Scorer
+styler = Styler(scorer="gpt2")  # uses GPT2Scorer by default
+print("##### lm을 쓰는 경우 맥락 고려 O ######")
+print(styler("내일 저랑 같이 점심 먹어요.", 0))
+```
+
+```
+##### lm을 쓰는 경우 맥락 고려 O ######
+내일 나랑 같이 점심 먹자.  # 권유가 아닌 청유이므로 이게 맞음
+```
 
 ## Hosting the interactive demo 
 

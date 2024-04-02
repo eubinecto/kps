@@ -5,12 +5,14 @@ from copy import copy, deepcopy
 import random
 from typing import Any, List, Tuple, Dict, Set
 from functools import wraps
+from loguru import logger
 import numpy as np
 import torch
 from politely.errors import EFNotSupportedError, SFNotIncludedError, EFNotIncludedError
 from politely.fetchers import fetch_kiwi
 from politely import RULES, SEP, TAG, NULL, SELF
 from politely.modeling_gpt2_scorer import GPT2Scorer
+from politely.modeling_heuristic_scorer import HeuristicScorer
 from politely.modeling_scorer import Scorer
 from politely.rules import EFS
 
@@ -18,11 +20,13 @@ from politely.rules import EFS
 def log(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        out = f(*args, **kwargs)
         # get the function signature
+        f_out = f(*args, **kwargs)
         names = f.__code__.co_varnames[: f.__code__.co_argcount]
-        args[0].logs[f.__name__] = {"in": dict(zip(names, args)), "out": copy(args[0].out)}
-        return out
+        styler_instance: Styler = args[0]
+        # exclude self
+        styler_instance.log[f.__name__] = {"in": dict(zip(names[1:], args[1:])), "out": copy(styler_instance.out)}
+        return f_out # return the out
     return wrapper
 
 
@@ -30,16 +34,20 @@ class Styler:
     """
     A rule-based Korean Politeness Styler
     """
-    def __init__(self, strict: bool = False, scorer: Scorer = GPT2Scorer()):
-        #  --- object-owned attributes --- #
-        self.scorer = scorer
+    def __init__(self, strict: bool = False, scorer: str = "gpt2"):
+        #  --- object-owned attributes --- #\
+        if scorer == "heuristic":
+            self.scorer: Scorer = HeuristicScorer()
+        elif scorer == "gpt2":
+            self.scorer: Scorer = GPT2Scorer()
+        else:
+            raise ValueError(f"scorer should be either 'heuristic' or 'gpt2', but got {scorer}")
         self.strict = strict
         self.out: Any = None
         self.kiwi = fetch_kiwi()
         self.rules = deepcopy(RULES)
-        self.logs = dict()
+        self.log = dict()
 
-    @log
     def __call__(self, sent: str, politeness: int) -> str:
         """
         Style a sentence with the given politeness (0, 1, 2)
@@ -50,6 +58,7 @@ class Styler:
             .check() \
             .honorify(politeness) \
             .guess() \
+            .elect() \
             .conjugate()
         return self.out
 
@@ -58,8 +67,8 @@ class Styler:
         Reset the out and clear all the logs,
         """
         self.out = None
-        self.logs.clear()
-        self.logs.update({"conjugations": set(), "honorifics": set()})
+        self.log.clear()
+        self.log.update({"conjugations": set(), "honorifics": set()})
         # --- seed everything --- #
         seed = 318
         random.seed(seed)
@@ -71,6 +80,7 @@ class Styler:
         torch.backends.cudnn.benchmark = True
         return self
 
+    @log
     def preprocess(self, sent: str):
         """
         Make sure each sentence ends with a period, if it does not end with any SF.
@@ -147,19 +157,29 @@ class Styler:
         """
         Guess the scores.
         """
-        self.out: List[List[str]]
-        # score each candidate
-        scores = self.scorer(self.out, self.logs, self.kiwi)
+        self.out: list[list[str]]
+        scores = self.scorer(self.out, self.log, self.kiwi)
         self.out = [(candidate, score) for candidate, score in zip(self.out, scores)]
         return self
+    
+    @log
+    def elect(self):
+        """
+        Elect the best candidate.
+        """
+        self.out: list[tuple[list[str], float]]
+        best = max(self.out, key=lambda x: x[1])
+        self.out = best
+        return self
 
+    @log
     def conjugate(self):
         """
-        Elect the best candidate and conjugate its pairs.
+        conjugate the best candidate.
         """
-        self.out: List[Tuple[List[str], float]]
-        best = max(self.out, key=lambda x: x[1])[0]
-        self.out = self.kiwi.join([(pair.split(TAG)[0], pair.split(TAG)[1]) for pair in best])
+        self.out: tuple[list[str], float]
+        sent = self.out[0]
+        self.out = self.kiwi.join([(pair.split(TAG)[0], pair.split(TAG)[1]) for pair in sent])
         return self
 
     def add_rules(self, rules: Dict[str, Tuple[Set,
