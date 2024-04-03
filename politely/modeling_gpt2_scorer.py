@@ -1,6 +1,5 @@
 import os
 import random
-from typing import List
 import numpy as np
 from kiwipiepy import Kiwi
 from transformers import AutoTokenizer, GPT2LMHeadModel
@@ -35,8 +34,8 @@ class GPT2Scorer(Scorer):
 
     def __call__(
         self,
-        candidates: List[List[str]],
-        logs: dict,
+        candidates: list[list[str]],
+        log: dict,
         kiwi: Kiwi,
         # label_smoothing: https://ratsgo.github.io/insight-notes/docs/interpretable/smoothing
         label_smoothing: float = 0.2,

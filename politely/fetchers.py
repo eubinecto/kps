@@ -5,7 +5,7 @@ def fetch_kiwi() -> Kiwi:
     """
     fetch kiwi with user-defined rules
     """
-    kiwi = Kiwi()
+    kiwi = Kiwi(model_type="sbg")  # use the better model by default
     kiwi.add_user_word(".", tag="SF")
     kiwi.add_user_word("우리말", tag="NNP", score=10)
     kiwi.add_user_word("점순이", tag="NNP", score=10)

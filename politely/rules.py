@@ -116,7 +116,6 @@ RULES.update(
     }
 )
 
-
 # --- 의문형인 경우, formal은 -니까만 가능 --- #
 RULES.update(
     {
@@ -222,17 +221,17 @@ RULES.update(
     }
 )
 
+# --- -어요 인 경우, 란다는 사용하지 않음 --- #
+RULES.update(
+    {
+        rf"(?P<MASK>어요{TAG}EF)": (
+            CASUAL - {f"란다{TAG}EF"},
+            {"어요{TAG}EF"},
+            FORMAL
+        )
+    }
+)
 
-# # --- 으세요 -> 으십시오 --- #
-# RULES.update(
-#     {
-#         rf"(?P<MASK>으세요{TAG}EF)": (
-#             {f"어{TAG}EF"},
-#             {f"으세요{TAG}EF"},
-#             {f"ᆸ시오{TAG}EF"}
-#         )
-#     }
-# )
 
 # ---- to be used for scoring -- #
 PREFERENCES = {

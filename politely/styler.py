@@ -8,6 +8,7 @@ from politely.fetchers import fetch_kiwi
 from politely import RULES, SEP, TAG, NULL, SELF
 from politely.modeling_gpt2_scorer import GPT2Scorer
 from politely.modeling_heuristic_scorer import HeuristicScorer
+from politely.modeling_sbg_scorer import SkipBigramScorer
 from politely.modeling_scorer import Scorer
 from politely.rules import EFS
 
@@ -29,10 +30,12 @@ class Styler:
     """
     A rule-based Korean Politeness Styler
     """
-    def __init__(self, strict: bool = False, scorer: str = "heuristic"):
-        #  --- object-owned attributes --- #\
+    def __init__(self, strict: bool = False, scorer: str = "ㅗ"):
+        #  --- object-owned attributes --- #
         if scorer == "heuristic":
             self.scorer: Scorer = HeuristicScorer()
+        elif scorer == "sbg":
+            self.scorer: Scorer = SkipBigramScorer()
         elif scorer == "gpt2":
             try:
                 import torch
@@ -151,7 +154,7 @@ class Styler:
         Guess the scores.
         """
         self.out: list[list[str]]
-        scores = self.scorer(self.out, self.log, self.kiwi)
+        scores = self.scorer(candidates=self.out, log=self.log, kiwi=self.kiwi)
         self.out = [(candidate, score) for candidate, score in zip(self.out, scores)]
         return self
     

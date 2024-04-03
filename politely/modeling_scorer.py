@@ -1,7 +1,8 @@
-from typing import List
+from kiwipiepy import Kiwi
+
 
 
 class Scorer:
 
-    def __call__(self,  candidates: List[List[str]], *args, **kwargs) -> List[float]:
+    def __call__(self,  candidates: list[list[str]], log: dict, kiwi: Kiwi) -> list[float]:
         raise NotImplementedError

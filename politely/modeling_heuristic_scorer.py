@@ -6,12 +6,12 @@ from politely.modeling_scorer import Scorer
 
 class HeuristicScorer(Scorer):
 
-    def __call__(self, candidates: List[List[str]], logs: dict, kiwi: Kiwi) -> List[List[float]]:
+    def __call__(self, candidates: List[List[str]], log: dict, kiwi: Kiwi) -> List[List[float]]:
         """
         A naive scoring strategy that relies on the heuristic rules.
         """
-        politeness = logs['honorify']['in']['politeness']
-        original_pairs = logs['analyze']['out'].split(SEP)
+        politeness = log['honorify']['in']['politeness']
+        original_pairs = log['analyze']['out'].split(SEP)
         if politeness == 0:
             boost_pairs = CASUAL & set(original_pairs)
         elif politeness == 1:

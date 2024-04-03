@@ -1,5 +1,4 @@
 from politely import Styler
-from kiwipiepy import Kiwi
 from pprint import pprint
 # an excerpt from 동백꽃 (김유정)
 text = """잔소리를 두루 늘어놓다가 남이 들을까봐 손으로 입을 틀어막고는 그 속에서 깔깔댄다. 별로 우스울 것도 없는데 날씨가 풀리더니 이 놈의 계집애가 미쳤나 하고 의심하였다.
@@ -10,11 +9,10 @@ text = """잔소리를 두루 늘어놓다가 남이 들을까봐 손으로 입�
 우리가 이 동네에 들어온 것은 근 삼년째 되어오지만 여태껏 가무잡잡한 점순이의 얼굴이 이렇게까지 홍당무처럼 새빨개진 법이 없었다.
 게다가 눈에 독을 올리고 한참 나를 요렇게 쏘아보더니 나중에는 눈물까지 어리는 것이 아니냐.
 그리고 바구니를 다시 집어들더니 이를 꼭 악물고는 엎어질 듯 자빠질 듯 논둑으로 횡하게 달아나는 것이다."""
-# split the text into sentences using whatever tools you prefer.
-kiwi = Kiwi()
-sents = [sent.text.strip() for sent in kiwi.split_into_sents(text)]
 # instantiate a Styler object.
-styler = Styler()
+styler = Styler(scorer="gpt2")
+# split the text into sentences using whatever tools you prefer.
+sents = [sent.text.strip() for sent in styler.kiwi.split_into_sents(text)]
 # to a polite style
 pprint(" ".join([styler(sent, 1) for sent in sents]))
 print("###")
