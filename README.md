@@ -150,10 +150,6 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 
 `sbg` scorer (SkipBigram) is a bit slower, but does take context into account.
 
-```shell
-# Pytorch is required to use GPT2 scorer. Install the version that fits your environment.
-pip3 install torch
-```
 ```python
 from politely.modeling_gpt2_scorer import GPT2Scorer
 styler = Styler(scorer="sbg")  # uses GPT2Scorer by default
