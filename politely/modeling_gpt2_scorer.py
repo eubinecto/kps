@@ -2,7 +2,6 @@ import os
 import random
 import numpy as np
 from kiwipiepy import Kiwi
-from transformers import AutoTokenizer, GPT2LMHeadModel
 from politely.modeling_scorer import Scorer
 from politely import TAG
 
@@ -14,6 +13,7 @@ class GPT2Scorer(Scorer):
 
     def __init__(self, device: str = "cpu"):
         import torch
+        from transformers import AutoTokenizer, GPT2LMHeadModel
         self.gpt2 = GPT2LMHeadModel.from_pretrained(
             "beomi/kykim-gpt3-kor-small_based_on_gpt2"
         ).to(device)

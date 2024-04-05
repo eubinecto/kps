@@ -149,7 +149,7 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 내일 나랑 같이 점심 먹어.
 ```
 
-But `gpt2` scorer is a bit slower, but does take context into account.
+`sbg` scorer (SkipBigram) is a bit slower, but does take context into account.
 
 ```shell
 # Pytorch is required to use GPT2 scorer. Install the version that fits your environment.
@@ -157,7 +157,7 @@ pip3 install torch
 ```
 ```python
 from politely.modeling_gpt2_scorer import GPT2Scorer
-styler = Styler(scorer="gpt2")  # uses GPT2Scorer by default
+styler = Styler(scorer="sbg")  # uses GPT2Scorer by default
 print("##### lm을 쓰는 경우 맥락 고려 O ######")
 print(styler("내일 저랑 같이 점심 먹어요.", 0))
 ```
@@ -167,7 +167,24 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 내일 나랑 같이 점심 먹자.  # 권유가 아닌 청유이므로 이게 맞음
 ```
 
-More scoring options will be made available in the future. 
+`gpt2` scorer is the most accurate, but it is also the slowest. 
+
+```shell
+# need to install optional dependency
+pip3 install "politely[gpt2]"
+```
+
+```python
+styler = Styler(scorer="gpt2")
+print("##### lm을 쓰는 경우 맥락 고려 O ######")
+print(styler("내일 저랑 같이 점심 먹어요.", 0))
+```
+
+```
+##### lm을 쓰는 경우 맥락 고려 O ######
+내일 저랑 같이 점심 먹으러 가요.  # 권유이므로 이게 맞음
+```
+
 
 ## Hosting the interactive demo 
 

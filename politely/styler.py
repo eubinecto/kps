@@ -42,13 +42,19 @@ class Styler:
             self.scorer: Scorer = SkipBigramScorer()
         elif scorer == "gpt2":
             try:
+                import transformers
+            except ImportError:
+                raise ImportError(
+                    "`transformers` is required to use `GPT2Scorer`. Please install it via `pip3 install transformers`."
+                )
+            try:
                 import torch
             except ImportError:
                 raise ImportError(
                     "`torch` (Pytorch) is required to use `GPT2Scorer`. Please install it via `pip3 install torch`."
                 )
-            else:
-                self.scorer: Scorer = GPT2Scorer()
+
+            self.scorer: Scorer = GPT2Scorer()
         else:
             raise ValueError(
                 f"scorer should be either 'heuristic', `sbg` or 'gpt2', but got {scorer}"
@@ -159,6 +165,7 @@ class Styler:
         # flatten pairs
         candidates = [list(itertools.chain(*candidate)) for candidate in candidates]
         # a list of candidates
+        assert len(candidates) > 0, "Candidates should not be empty"
         self.out = candidates
         return self
 

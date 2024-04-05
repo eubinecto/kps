@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "politely"
-version = "4.0.0a0"
+version = "4.0.0a1"
 description = "An explainable styler for the Korean language"
 authors = ["Eu-Bin KIM <tlrndk123@gmail.com>"]
 readme = "README.md"
@@ -8,10 +8,15 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9.12"
 kiwipiepy = "^0.17.0"
-transformers = "^4.39.3"
+transformers = {version = "^4.39.3", optional = true}
+torch = {version = "^2.2.2", optional = true}
+
+[tool.poetry.extras]
+gpt2 = ["transformers", "torch"]
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.1"
+pytest = "^8.1.1"
 
 [build-system]
 requires = ["poetry-core"]

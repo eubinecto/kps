@@ -1,9 +1,3 @@
-"""
-규칙:
-1.
-"""
-from typing import Set, Tuple, Dict
-
 # --- symbols --- #
 NULL = "❌"
 TAG = "🏷"
@@ -71,7 +65,7 @@ NO_JONG_SUNG = rf"[^{''.join({chr(i) for i in range(44032, 55204)} - {chr(44032 
 
 
 # --- programmatically populated RULES --- #
-RULES: Dict[str, Tuple[Set[str], Set[str], Set[str]]] = dict()
+RULES: dict[str, tuple[set[str], set[str], set[str]]] = dict()
 
 # --- the overarching rule --- #
 RULES.update({
@@ -203,7 +197,6 @@ RULES.update(
         rf"(?P<MASK>(지|지요|ᆸ니다){TAG}EF)": (
             {f"지{TAG}EF"},
             {f"지요{TAG}EF"},
-            #  전부 가능함
             FORMAL
         )
     }
@@ -221,17 +214,8 @@ RULES.update(
     }
 )
 
-# --- -어요 인 경우, 란다는 사용하지 않음 --- #
-RULES.update(
-    {
-        rf"(?P<MASK>어요{TAG}EF)": (
-            CASUAL - {f"란다{TAG}EF"},
-            {"어요{TAG}EF"},
-            FORMAL
-        )
-    }
-)
-
+# rule을 추가할 때 ... 교집합이 너무 금방 사라진다는 것이 문제.
+# 너무 많은 룰을 추가하면 안될듯함. 
 
 # ---- to be used for scoring -- #
 PREFERENCES = {
