@@ -186,18 +186,11 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 ```
 
 
-## Hosting the interactive demo 
+## An interactive demo 
 
-You can either host the interactive demo locally (You have to setup your own `OPENAI_API_KEY`)
-```shell
-export OPENAI_API_KEY = ...
-# host the demo via streamlit
-streamlit run main_streamlit.py
-```
-
-Or just visit [the demo we are hosting](https://politely.streamlit.app) for you | 
+Try politely by visiting [the demo we are hosting](https://politely.streamlit.app) for you | 
 --- |
-<img width="743" alt="image" src="https://user-images.githubusercontent.com/56193069/177812857-afa40454-1afd-4b09-873f-aa9db3495d9e.png"> | 
+![alt text](image.png) | 
 
 
 
