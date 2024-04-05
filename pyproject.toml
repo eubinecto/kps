@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "politely"
-version = "4.0.1"
+version = "4.0.2"
 description = "An explainable styler for the Korean language"
 authors = ["Eu-Bin KIM <tlrndk123@gmail.com>"]
 readme = "README.md"

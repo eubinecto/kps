@@ -135,9 +135,9 @@ pprint(styler.logs['guess']['out'])
   0.0125)]
 ```
 
-### 5️⃣ Take contexts into account with the `gpt2` scorer 
+### 5️⃣ Take contexts into account with language models
 
-`heuristic` scorer is fast, but falls short at taking context into account:
+`heuristic` scorer is fast, but it is a purely rule-based scorer. It thus falls short at taking context into account:
 ```python
 styler = Styler(scorer="heuristic")
 print("##### lm을 쓰지 않는 경우 맥락 고려 X ######")
@@ -167,7 +167,8 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 내일 나랑 같이 점심 먹자.  # 권유가 아닌 청유이므로 이게 맞음
 ```
 
-`gpt2` scorer is the most accurate, but it is also the slowest. 
+`gpt2` scorer is the most accurate, but it is also the slowest. GPU support will be added in the future, 
+but as of right now, this is an experimental option. If you want to use this as the scorer, you first need to install the optional dependencies for `gpt2` scorer:
 
 ```shell
 # need to install optional dependency
