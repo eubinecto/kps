@@ -1,7 +1,6 @@
 import itertools
 import re
 from copy import copy, deepcopy
-from typing import Any, Tuple, Dict, Set
 from functools import wraps
 from politely.errors import EFNotSupportedError, SFNotIncludedError, EFNotIncludedError
 from politely.fetchers import fetch_kiwi
@@ -21,8 +20,12 @@ def log(f):
         names = f.__code__.co_varnames[: f.__code__.co_argcount]
         styler_instance: Styler = args[0]
         # exclude self
-        styler_instance.log[f.__name__] = {"in": dict(zip(names[1:], args[1:])), "out": copy(styler_instance.out)}
-        return f_out # return the out
+        styler_instance.log[f.__name__] = {
+            "in": dict(zip(names[1:], args[1:])),
+            "out": copy(styler_instance.out),
+        }
+        return f_out  # return the out
+
     return wrapper
 
 
@@ -30,6 +33,7 @@ class Styler:
     """
     A rule-based Korean Politeness Styler
     """
+
     def __init__(self, strict: bool = False, scorer: str = "sbg"):
         #  --- object-owned attributes --- #
         if scorer == "heuristic":
@@ -46,9 +50,11 @@ class Styler:
             else:
                 self.scorer: Scorer = GPT2Scorer()
         else:
-            raise ValueError(f"scorer should be either 'heuristic', `sbg` or 'gpt2', but got {scorer}")
+            raise ValueError(
+                f"scorer should be either 'heuristic', `sbg` or 'gpt2', but got {scorer}"
+            )
         self.strict = strict
-        self.out: Any = None
+        self.out: any = None
         self.kiwi = fetch_kiwi()
         self.rules = deepcopy(RULES)
         self.log = dict()
@@ -57,14 +63,9 @@ class Styler:
         """
         Style a sentence with the given politeness (0, 1, 2)
         """
-        self.setup() \
-            .preprocess(sent) \
-            .analyze() \
-            .check() \
-            .honorify(politeness) \
-            .guess() \
-            .elect() \
-            .conjugate()
+        self.setup().preprocess(sent).analyze().check().honorify(
+            politeness
+        ).guess().elect().conjugate()
         return self.out
 
     def setup(self):
@@ -91,7 +92,9 @@ class Styler:
         Analyze the sentence and generate the output.
         """
         self.out: str
-        self.out = [f"{token.form}{TAG}{token.tag}" for token in self.kiwi.tokenize(self.out)]
+        self.out = [
+            f"{token.form}{TAG}{token.tag}" for token in self.kiwi.tokenize(self.out)
+        ]
         self.out = SEP.join(self.out)  # to match with the format of the rules
         return self
 
@@ -109,7 +112,9 @@ class Styler:
             if "EF" not in self.out:
                 raise EFNotIncludedError(self.out)
             # assumption 3: all EF's should be supported by politely.
-            if not all([re.match(EFS, pair) for pair in self.out.split(SEP) if "EF" in pair]):
+            if not all(
+                [re.match(EFS, pair) for pair in self.out.split(SEP) if "EF" in pair]
+            ):
                 raise EFNotSupportedError(self.out)
         return self
 
@@ -126,24 +131,33 @@ class Styler:
             if match:
                 # should be only one pair
                 pair = match.group("MASK")
-                honorifics = {honorific.replace(SELF, pair) for honorific in self.rules[pattern][politeness]}
+                honorifics = {
+                    honorific.replace(SELF, pair)
+                    for honorific in self.rules[pattern][politeness]
+                }
                 # progressively narrow down honorifics
-                pair2honorifics[pair] = pair2honorifics.get(pair, honorifics) & honorifics
+                pair2honorifics[pair] = (
+                    pair2honorifics.get(pair, honorifics) & honorifics
+                )
         # get all possible candidates
-        candidates = itertools.product(*[
-            pair2honorifics.get(pair, {pair, })
-            for pair in self.out.split(SEP)  # SEP
-        ])
+        candidates = itertools.product(
+            *[
+                pair2honorifics.get(
+                    pair,
+                    {
+                        pair,
+                    },
+                )
+                for pair in self.out.split(SEP)  # SEP
+            ]
+        )
         # remove empty candidates
         candidates = [
             [pair.split(SEP) for pair in candidate if pair != NULL]
             for candidate in candidates
         ]
         # flatten pairs
-        candidates = [
-            list(itertools.chain(*candidate))
-            for candidate in candidates
-        ]
+        candidates = [list(itertools.chain(*candidate)) for candidate in candidates]
         # a list of candidates
         self.out = candidates
         return self
@@ -157,7 +171,7 @@ class Styler:
         scores = self.scorer(candidates=self.out, log=self.log, kiwi=self.kiwi)
         self.out = [(candidate, score) for candidate, score in zip(self.out, scores)]
         return self
-    
+
     @log
     def elect(self):
         """
@@ -175,12 +189,12 @@ class Styler:
         """
         self.out: tuple[list[str], float]
         sent = self.out[0]
-        self.out = self.kiwi.join([(pair.split(TAG)[0], pair.split(TAG)[1]) for pair in sent])
+        self.out = self.kiwi.join(
+            [(pair.split(TAG)[0], pair.split(TAG)[1]) for pair in sent]
+        )
         return self
 
-    def add_rules(self, rules: Dict[str, Tuple[Set,
-                                               Set,
-                                               Set]]):
+    def add_rules(self, rules: dict[str, tuple[set, set, set]]):
         """
         Add rules to the existing rules.
         """
@@ -189,7 +203,8 @@ class Styler:
             # first, check if the key includes a group with the key; (?<MASK>...)
             # e.g. (?P<MASK>(아빠|아버지){TAG}NNG)
             if not re.search(re.escape(r"(?P<MASK>") + r".*" + re.escape(")"), key):
-                raise ValueError(f"key should include a group with the key; (?P<MASK>...), but got {key}")
+                raise ValueError(
+                    f"key should include a group with the key; (?P<MASK>...), but got {key}"
+                )
         self.rules.update(rules)
         return self
-        
