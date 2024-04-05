@@ -10,7 +10,7 @@ text = """잔소리를 두루 늘어놓다가 남이 들을까봐 손으로 입�
 게다가 눈에 독을 올리고 한참 나를 요렇게 쏘아보더니 나중에는 눈물까지 어리는 것이 아니냐.
 그리고 바구니를 다시 집어들더니 이를 꼭 악물고는 엎어질 듯 자빠질 듯 논둑으로 횡하게 달아나는 것이다."""
 # instantiate a Styler object.
-styler = Styler(scorer="gpt2")
+styler = Styler(scorer="sbg")
 # split the text into sentences using whatever tools you prefer.
 sents = [sent.text.strip() for sent in styler.kiwi.split_into_sents(text)]
 # to a polite style

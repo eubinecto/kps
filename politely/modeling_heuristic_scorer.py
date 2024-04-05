@@ -1,4 +1,3 @@
-from typing import List
 from kiwipiepy import Kiwi
 from politely import PREFERENCES, CASUAL, POLITE, FORMAL, SEP
 from politely.modeling_scorer import Scorer
@@ -6,7 +5,7 @@ from politely.modeling_scorer import Scorer
 
 class HeuristicScorer(Scorer):
 
-    def __call__(self, candidates: List[List[str]], log: dict, kiwi: Kiwi) -> List[List[float]]:
+    def __call__(self, candidates: list[list[str]], log: dict, kiwi: Kiwi) -> list[list[float]]:
         """
         A naive scoring strategy that relies on the heuristic rules.
         """

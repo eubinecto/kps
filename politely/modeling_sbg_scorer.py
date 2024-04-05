@@ -12,9 +12,6 @@ class SkipBigramScorer(Scorer):
     """
 
     def __call__(self, candidates: list[list[str]], log: dict, kiwi: Kiwi) -> list[float]:
-        """
-        compute the ...
-        """
         # first, join the pairs into a sentence
         sents = [
             kiwi.join(tuple(pair.split(TAG)) for pair in candidate)

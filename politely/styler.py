@@ -30,7 +30,7 @@ class Styler:
     """
     A rule-based Korean Politeness Styler
     """
-    def __init__(self, strict: bool = False, scorer: str = "ㅗ"):
+    def __init__(self, strict: bool = False, scorer: str = "sbg"):
         #  --- object-owned attributes --- #
         if scorer == "heuristic":
             self.scorer: Scorer = HeuristicScorer()
@@ -41,12 +41,12 @@ class Styler:
                 import torch
             except ImportError:
                 raise ImportError(
-                    "torch (Pytorch) is required to use GPT2Scorer.  Please install it via `pip3 install torch`."
+                    "`torch` (Pytorch) is required to use `GPT2Scorer`. Please install it via `pip3 install torch`."
                 )
             else:
                 self.scorer: Scorer = GPT2Scorer()
         else:
-            raise ValueError(f"scorer should be either 'heuristic' or 'gpt2', but got {scorer}")
+            raise ValueError(f"scorer should be either 'heuristic', `sbg` or 'gpt2', but got {scorer}")
         self.strict = strict
         self.out: Any = None
         self.kiwi = fetch_kiwi()

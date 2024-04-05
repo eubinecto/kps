@@ -1,6 +1,3 @@
-import re
-from typing import List
-from politely.rules import RULES
 
 
 class SFNotIncludedError(Exception):

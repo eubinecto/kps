@@ -3,13 +3,13 @@ import random
 import numpy as np
 from kiwipiepy import Kiwi
 from transformers import AutoTokenizer, GPT2LMHeadModel
-from politely import TAG
 from politely.modeling_scorer import Scorer
+from politely import TAG
 
 
 class GPT2Scorer(Scorer):
     """
-    More accurate than heuristic scorer, but slower.
+    More accurate than heuristic scorer, but slower. Could be made faster with GPU support. 
     """
 
     def __init__(self, device: str = "cpu"):
