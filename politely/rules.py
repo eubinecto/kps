@@ -135,6 +135,18 @@ RULES.update(
     }
 )
 
+# --- 계시/VX: 반말을 쓰는 경우 제거 --- #
+RULES.update(
+    {
+        rf"(?P<MASK>계시{TAG}VX)": (
+            {f"있{TAG}VX"},  # replace it with this.
+            {SELF},  # just repeat yourself
+            {SELF},  # just repeat yourself
+        )
+    }
+)
+
+
 
 # --- 종성이 있는 경우, 종성으로 시작하는 EF는 사용하지 않음 --- #
 RULES.update(
@@ -151,18 +163,18 @@ RULES.update(
 RULES.update(
     {
         rf"{NO_JONG_SUNG}{TAG}[A-Z\-]+?{SEP}{EFS}": (
-            CASUAL - {f"어{TAG}EF", f"어라{TAG}EF"},
+            CASUAL - {f"어{TAG}EF", f"어라{TAG}EF", f"마{TAG}EF"},
             POLITE - {f"어요{TAG}EF"},
             FORMAL
         )
     }
 )
 
-# --- 의문형인 경우, formal은 -니까만 가능 --- #
+# --- 의문형인 경우, CASUAL에서 -다는 불가. formal은 -니까만 가능 --- #
 RULES.update(
     {
         rf"{EFS}{SEP}\?{TAG}SF": (
-            CASUAL,
+            CASUAL - {f"다{TAG}EF", f"데{TAG}EF"},
             POLITE,
             {f"습니까{TAG}EF", f"ᆸ니까{TAG}EF", f"시{TAG}EP{SEP}ᆸ니까{TAG}EF"}
         )
