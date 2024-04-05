@@ -17,6 +17,7 @@ gpt2 = ["transformers", "torch"]
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.1"
 pytest = "^8.1.1"
+pandas = "^2.2.1"
 
 [build-system]
 requires = ["poetry-core"]
