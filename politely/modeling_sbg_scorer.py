@@ -1,4 +1,3 @@
-
 from politely.rules import TAG
 from .modeling_scorer import Scorer
 from kiwipiepy import Kiwi
