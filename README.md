@@ -136,7 +136,7 @@ pprint(styler.logs['guess']['out'])
 
 ### 5️⃣ Take contexts into account with language models
 
-`heuristic` scorer is fast, but it is a purely rule-based scorer. It thus falls short at taking context into account:
+`heuristic` scorer is fast, but it is purely rule-based. It falls short at taking contexts into account:
 ```python
 styler = Styler(scorer="heuristic")
 print("##### lm을 쓰지 않는 경우 맥락 고려 X ######")
@@ -148,7 +148,7 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 내일 나랑 같이 점심 먹어.
 ```
 
-`sbg` scorer (SkipBigram) is a bit slower, but does take context into account.
+`sbg` scorer (SkipBigram) is a bit slower, but does take context into account. Useful for most cases.
 
 ```python
 from politely.modeling_gpt2_scorer import GPT2Scorer
@@ -162,8 +162,7 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 내일 나랑 같이 점심 먹자.  # 권유가 아닌 청유이므로 이게 맞음
 ```
 
-`gpt2` scorer is the most accurate, but it is also the slowest. GPU support will be added in the future, 
-but as of right now, this is an experimental option. If you want to use this as the scorer, you first need to install the optional dependencies for `gpt2` scorer:
+`gpt2` scorer is the most accurate, but it is also the slowest. This is an experimental option as of right now. If you want to use `gpt2` as the scorer, you first need to install the optional dependencies for `gpt2` scorer:
 
 ```shell
 # need to install optional dependency
@@ -184,7 +183,7 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 
 ## An interactive demo 
 
-Try politely by visiting [the demo we are hosting](https://politely.streamlit.app) for you | 
+Try politely by visiting [the demo we are hosting](https://politely.streamlit.app) | 
 --- |
 ![alt text](image.png) | 
 
