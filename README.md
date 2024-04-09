@@ -151,7 +151,6 @@ print(styler("내일 저랑 같이 점심 먹어요.", 0))
 `sbg` scorer (SkipBigram) is a bit slower, but does take context into account. Useful for most cases.
 
 ```python
-from politely.modeling_gpt2_scorer import GPT2Scorer
 styler = Styler(scorer="sbg")  # uses GPT2Scorer by default
 print("##### lm을 쓰는 경우 맥락 고려 O ######")
 print(styler("내일 저랑 같이 점심 먹어요.", 0))
